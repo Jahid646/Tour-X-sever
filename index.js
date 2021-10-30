@@ -52,6 +52,13 @@ async function run(){
         res.json(result);
     })
 
+    // user order 
+    app.get('/order/:id', async (req, res) =>{
+        const uid =[req.params.id];
+        const query = {uid: {$in: uid}};
+        const result = await orderCollection.find(query).toArray();
+        res.json(result);
+    })
     // post api 
     app.post('/offers', async(req, res) =>{
 
@@ -66,7 +73,7 @@ async function run(){
 
     // delete 
 
-    app.delete('/orders/:id', async(req, res)=>{
+    app.delete('/order/:id', async(req, res)=>{
         const id = req.params.id;
         const query = {_id:ObjectId(id)};
         const result = await orderCollection.deleteOne(query);
