@@ -34,13 +34,22 @@ async function run(){
         const offers = await cursor.toArray();
         res.send(offers);
        
-    })
+    });
 
     // get single offer
     app.get('/offers/:id', async(req, res) =>{
         const id = req.params.id;
         const query = {_id: ObjectId(id)};
         const offer = await offerCollection.findOne(query);
+        res.json(offer);
+        
+    });
+
+
+     app.get('/single-order/:id', async(req, res) =>{
+        const id = req.params.id;
+        const query = {_id: ObjectId(id)};
+        const offer = await orderCollection.findOne(query);
         res.json(offer);
         
     })
@@ -70,6 +79,32 @@ async function run(){
     res.json(result);
     res.send('post hitted');
     });
+
+    // order manage api 
+        app.get('/all-orders', async (req, res )=>{
+        
+        const cursor = orderCollection.find({});
+        const offers = await cursor.toArray();
+        res.send(offers);
+       
+    });
+
+    // put api 
+    app.put('/order-status/:id', async(req, res) =>{
+        const id = req.params.id;
+        const order = req.body;
+        const filter = {_id: ObjectId(id)};
+        const options = { upsert: true };
+        const updateDoc = {
+         $set: {
+            status: order.status
+        },
+        };
+        const result = await orderCollection.updateOne(filter, updateDoc, options);
+        res.json(result);
+    });
+
+
 
     // delete 
 
